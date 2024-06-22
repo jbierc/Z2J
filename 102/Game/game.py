@@ -2,11 +2,12 @@
 Napisz prostą grę tekstową. Wymyśl prostą zagadkę, zaprojektuj jedno, max dwa pomieszczenia,
 dodaj możliwość zdobywania i używania przedmiotów. Pozwól nam przeżyć jakąś mini przygodę.
 
-use PRZEDMIOT
-take PRZEDMIOT
-items - wyświetli listę przedmiotów
 help - wyświetli listę dostępnych instrukcji
 describe - opisuje aktualne pomieszczenie
+items - wyświetli listę przedmiotów
+take PRZEDMIOT
+use PRZEDMIOT
+
 
 Dodaj komendy, które uznasz jeszcze za potrzebne.
 Użyj klas i operacji wejścia/wyjścia.
@@ -23,9 +24,9 @@ Wpis ma zawierać 4 elementy:
 from rooms.room1 import Room1
 
 class Game:
-    def __init__(self, location = 'room1'):
+    def __init__(self):
         self.is_playing = True
-        self.location = Room1()
+        self.current_room = Room1()
 
     def start(self):
         self.intro()
@@ -46,8 +47,10 @@ class Game:
             self.handle_command(command)
 
     def handle_command(self, command):
-        if command == 'describe':
-            self.location.load_description(self.location.name)
+        if command == "help":
+            print()
+        if command == "describe":
+            self.current_room.display_description()
 
 game = Game()
 game.start()

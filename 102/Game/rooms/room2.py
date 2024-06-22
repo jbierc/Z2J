@@ -3,11 +3,10 @@ from room3 import Room3
 
 class Room2(Room):
     def __init__(self):
-        super().__init__('room2')
+        super().__init__("room2")
 
     def handle_command(self, command):
         if command == "turn":
-            return Room3()
+            pass
         else:
-            print("Nieznane polecenie.")
-            return None
+            pass
