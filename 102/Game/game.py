@@ -20,19 +20,28 @@ Wpis ma zawierać 4 elementy:
 4. Jeśli do rozwiązania były Ci potrzebne inne materiały niż książka, wrzuć linki.
 """
 
-from rooms.room1 import Room1
-
+from rooms.room1 import Room1, Room1_1
+from items.gear import Gear
+from items.pedestal import Pedestal
 
 class Game:
     def __init__(self):
         self.player = Player()
         self.is_playing = True
         self.current_room = Room1()
+        self.current_item = None
+        self.items = {
+            "gear": Gear(),
+            "pedestal": Pedestal()
+        }
         self.commands = {
             "help": self.show_help,
             "describe": self.describe_room,
             "items": self.player.list_items,
             "quit": self.quit_game,
+            "something": self.gear,
+            "pedestal": self.pedestal,
+            "take": self.take_item
         }
 
     def start(self):
@@ -53,17 +62,35 @@ class Game:
         action = self.commands.get(command, self.unknown_command)
         action()
 
+    def describe_room(self):
+        self.current_room.display_description()
+    
+    def gear(self):
+        self.current_item = self.items["gear"]
+        self.current_item.display_description()
+
+    def pedestal(self):
+        self.current_item = self.items["pedestal"]
+        self.current_item.display_description()
+    
+    def take_item(self):
+        if self.current_item:
+            self.player.items[self.current_item.name] = self.current_item
+            self.player.items[self.current_item.name].taken = True
+            print("You took this item to your backpack.")
+            self.current_item = None
+        if "gear" in self.player.items:
+            self.current_room = Room1_1()
+            self.current_room.display_description()
+
     def show_help(self):
         print("Type 'describe' to display a description of your surroundings...")
         print("Type 'items' to display a list of items...")
         print("Type 'quit' to exit the game...")
 
-    def describe_room(self):
-        self.current_room.display_description()
-
     def quit_game(self):
         self.is_playing = False
-        print("Exiting the game...")
+        print("Quitting the game...")
 
     def unknown_command(self):
         print("Unknown command. Type 'help' to see the list of available commands.")
@@ -82,21 +109,20 @@ class Game:
     '''
 
 class Player:
-    items = []
 
     def __init__(self):
         self.name = None
+        self.items = {}
 
     def player_name(self):
         print("Type your name:")
         self.name = input("> ")
 
     def list_items(self):
-        print(", ".join(self.items))
-
-    def take_item(self, item):
-        self.items.append(item)
-
+        if self.items:
+            print("You have " + ", ".join(self.items) + " in your bag.")
+        else:
+            print("You have no items in your bag.")
 
 game = Game()
 game.start()

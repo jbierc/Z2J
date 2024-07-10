@@ -13,16 +13,3 @@ class Item:
     def display_description(self):
         for line in self.description:
             print(line.strip())
-
-class Gear(Item):
-    def __init__(self):
-        super().__init__("gear")
-
-class Pedestal(Item):
-    def __init__(self):
-        super().__init__("pedestal")
-
-class Door(Item):
-    def __init__(self):
-        super().__init__("door")
-        self.state = "closed"
