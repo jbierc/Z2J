@@ -96,16 +96,15 @@ class Game:
         if self.current_item:
             self.current_item.use()
             if self.current_item.name in self.player.items:
-                self.used_items[self.current_item.name] = self.items[self.current_item]
+                self.used_items[self.current_item.name] = self.current_item
                 del self.player.items[self.current_item.name]
             self.used_items[self.current_item.name] = self.current_item
-            self.current_room = Room1_1()
-            if "pedestal" in self.used_items:
+            if "wheel" in self.used_items:
                 self.current_room = Room1_2()
             self.current_item = None
         else:
             if self.player.items:
-                print("What item would you like to use? You have " + ", ".join(self.player.items).upper() + " in your backpack.")
+                print("What item would you like to use? You have " + ", ".join(self.player.items.keys()).upper() + " in your backpack.")
             else:
                 print("What item would you like to use? You have no items in your backpack.")
 
@@ -126,14 +125,14 @@ class Game:
     '''
     def save_game(self):
         with open("savegame.txt", "w") as f:
-            f.write(self.location)
+            f.write(self.current_room)
 
     def load_game(self):
         if os.path.exists("savegame.txt"):
             with open("savegame.txt", "r") as f:
-                self.location = f.read().strip()
+                self.current_room = f.read().strip()
         else:
-            print("Brak zapisanego stanu gry.")
+            print("No saved game.")
     '''
 
 class Player:
@@ -148,7 +147,7 @@ class Player:
 
     def list_items(self):
         if self.items:
-            print("You have " + ", ".join(self.items) + " in your backpack.")
+            print("You have " + ", ".join(self.items.keys()).upper() + " in your backpack.")
         else:
             print("You have no items in your backpack.")
 
