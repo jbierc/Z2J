@@ -1,0 +1,3 @@
+A wheel is stuck in the pedestal.
+You see an opened DOOR in front of you.
+Would you like to GO there?

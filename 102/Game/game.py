@@ -20,8 +20,8 @@ Wpis ma zawierać 4 elementy:
 4. Jeśli do rozwiązania były Ci potrzebne inne materiały niż książka, wrzuć linki.
 """
 
-from rooms.room1 import Room1, Room1_1
-from items.gear import Gear
+from rooms.room1 import Room1, Room1_1, Room1_2
+from items.gear import Wheel
 from items.pedestal import Pedestal
 
 class Game:
@@ -34,6 +34,7 @@ class Game:
             "wheel": Wheel(),
             "pedestal": Pedestal()
         }
+        self.used_items = {}
         self.commands = {
             "help": self.show_help,
             "describe": self.describe_room,
@@ -67,29 +68,46 @@ class Game:
         self.current_room.display_description()
     
     def wheel(self):
-        if "wheel" not in self.player.items:
+        if "wheel" in self.player.items:
+            self.current_item = self.items["wheel"]
+            print("Would you like to USE it?")
+        elif "wheel" in self.used_items:
+            self.current_item = self.used_items["wheel"]
+            self.current_item.used()
+            self.current_item = None
+        else:
             self.current_item = self.items["wheel"]
             self.current_item.display_description()
-        else:
-            self.current_item = self.player.items["wheel"]
-            print("Would you like to USE it?")
 
     def pedestal(self):
-        self.current_item = self.items["pedestal"]
-        self.current_item.display_description()
+        self.items["pedestal"].display_description()
     
     def take_item(self):
         if self.current_item:
             self.player.items[self.current_item.name] = self.current_item
-            self.player.items[self.current_item.name].taken = True
             print("You took this item to your backpack.")
             self.current_item = None
+        else:
+            print("What item would you like to take? Maybe I can DESCRIBE this room for you?")
         if "wheel" in self.player.items:
             self.current_room = Room1_1()
     
     def use_item(self):
         if self.current_item:
             self.current_item.use()
+            if self.current_item.name in self.player.items:
+                self.used_items[self.current_item.name] = self.items[self.current_item]
+                del self.player.items[self.current_item.name]
+            self.used_items[self.current_item.name] = self.current_item
+            self.current_room = Room1_1()
+            if "pedestal" in self.used_items:
+                self.current_room = Room1_2()
+            self.current_item = None
+        else:
+            if self.player.items:
+                print("What item would you like to use? You have " + ", ".join(self.player.items).upper() + " in your backpack.")
+            else:
+                print("What item would you like to use? You have no items in your backpack.")
 
 
 
@@ -130,9 +148,9 @@ class Player:
 
     def list_items(self):
         if self.items:
-            print("You have " + ", ".join(self.items) + " in your bag.")
+            print("You have " + ", ".join(self.items) + " in your backpack.")
         else:
-            print("You have no items in your bag.")
+            print("You have no items in your backpack.")
 
 game = Game()
 game.start()
