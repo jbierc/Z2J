@@ -31,7 +31,7 @@ class Game:
         self.current_room = Room1()
         self.current_item = None
         self.items = {
-            "gear": Gear(),
+            "wheel": Wheel(),
             "pedestal": Pedestal()
         }
         self.commands = {
@@ -39,9 +39,10 @@ class Game:
             "describe": self.describe_room,
             "items": self.player.list_items,
             "quit": self.quit_game,
-            "something": self.gear,
+            "wheel": self.wheel,
             "pedestal": self.pedestal,
-            "take": self.take_item
+            "take": self.take_item,
+            "use": self.use_item
         }
 
     def start(self):
@@ -65,9 +66,13 @@ class Game:
     def describe_room(self):
         self.current_room.display_description()
     
-    def gear(self):
-        self.current_item = self.items["gear"]
-        self.current_item.display_description()
+    def wheel(self):
+        if "wheel" not in self.player.items:
+            self.current_item = self.items["wheel"]
+            self.current_item.display_description()
+        else:
+            self.current_item = self.player.items["wheel"]
+            print("Would you like to USE it?")
 
     def pedestal(self):
         self.current_item = self.items["pedestal"]
@@ -79,9 +84,14 @@ class Game:
             self.player.items[self.current_item.name].taken = True
             print("You took this item to your backpack.")
             self.current_item = None
-        if "gear" in self.player.items:
+        if "wheel" in self.player.items:
             self.current_room = Room1_1()
-            self.current_room.display_description()
+    
+    def use_item(self):
+        if self.current_item:
+            self.current_item.use()
+
+
 
     def show_help(self):
         print("Type 'describe' to display a description of your surroundings...")

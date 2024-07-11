@@ -1,7 +1,9 @@
 from item import Item
 
-class Gear(Item):
+class Wheel(Item):
     def __init__(self):
-        super().__init__("a gear")
+        super().__init__("wheel")
         self.used = False
         self.taken = False
+    def use(self):
+        
