@@ -1,16 +1,4 @@
 """
-Napisz prostą grę tekstową. Wymyśl prostą zagadkę, zaprojektuj jedno, max dwa pomieszczenia,
-dodaj możliwość zdobywania i używania przedmiotów. Pozwól nam przeżyć jakąś mini przygodę.
-
-help - wyświetli listę dostępnych instrukcji
-describe - opisuje aktualne pomieszczenie
-items - wyświetli listę przedmiotów
-take PRZEDMIOT
-use PRZEDMIOT
-
-Dodaj komendy, które uznasz jeszcze za potrzebne.
-Użyj klas i operacji wejścia/wyjścia.
-
 Potem zrób wpis na p-102-egzamin 
 Wpis ma zawierać 4 elementy:
 
@@ -21,8 +9,10 @@ Wpis ma zawierać 4 elementy:
 """
 
 from rooms.room1 import Room1, Room1_1, Room1_2
+from rooms.room2 import Room2
 from items.gear import Wheel
 from items.pedestal import Pedestal
+from items.doors import Door1, Door2
 
 class Game:
     def __init__(self):
@@ -31,6 +21,7 @@ class Game:
         self.current_room = Room1()
         self.current_item = None
         self.items = {
+            "door": Door1(),
             "wheel": Wheel(),
             "pedestal": Pedestal()
         }
@@ -40,6 +31,7 @@ class Game:
             "describe": self.describe_room,
             "items": self.player.list_items,
             "quit": self.quit_game,
+            "door": self.door1,
             "wheel": self.wheel,
             "pedestal": self.pedestal,
             "take": self.take_item,
@@ -61,11 +53,21 @@ class Game:
         self.handle_command(command)
 
     def handle_command(self, command):
-        action = self.commands.get(command, self.unknown_command)
-        action()
+        if command == "left" or "center" or "right":
+            self.minigame(command)
+        else:
+            action = self.commands.get(command, self.unknown_command)
+            action()
 
     def describe_room(self):
         self.current_room.display_description()
+
+    def door1(self):
+        if "wheel" in self.used_items:
+            self.items["door"].used()
+            self.current_room = Room2()
+        else:
+            self.items["door"].display_description()
     
     def wheel(self):
         if "wheel" in self.player.items:
@@ -81,6 +83,15 @@ class Game:
 
     def pedestal(self):
         self.items["pedestal"].display_description()
+
+    def minigame(self, command):
+        self.left = False
+        self.center = False
+        self.right = False
+        if command
+
+
+
     
     def take_item(self):
         if self.current_item:
@@ -153,3 +164,5 @@ class Player:
 
 game = Game()
 game.start()
+
+# -> minizagadka
