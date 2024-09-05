@@ -25,6 +25,9 @@ class Game:
             "wheel": Wheel(),
             "pedestal": Pedestal()
         }
+        self.left = False
+        self.centre = False
+        self.right = False
         self.used_items = {}
         self.commands = {
             "help": self.show_help,
@@ -53,7 +56,7 @@ class Game:
         self.handle_command(command)
 
     def handle_command(self, command):
-        if command == "left" or "center" or "right":
+        if command in ["left", "centre", "right"]:
             self.minigame(command)
         else:
             action = self.commands.get(command, self.unknown_command)
@@ -85,14 +88,39 @@ class Game:
         self.items["pedestal"].display_description()
 
     def minigame(self, command):
-        self.left = False
-        self.center = False
-        self.right = False
-        if command
-
-
-
-    
+        if command == "left":
+            if self.centre == True:
+                print("""                *** SUCCESS! ***                        
+   _______          _______          _______ 
+  |       |        |       |        |       |""")
+            else:
+                self.left = True
+                self.centre = False
+                self.right = True
+                print("""                    _______                 
+   _______         |       |         _______ 
+  |       |        |       |        |       |""")
+        if command == "centre":
+            if self.left == True:
+                self.left = False
+            self.centre = True
+            if self.right == True:
+                self.right = False
+            print("""   _______                           _______
+  |       |         _______         |       |
+  |       |        |       |        |       |
+""")
+        if command == "right":
+            self.left = True
+            if self.centre == True:
+                self.centre = False
+            if self.right == False:
+                self.right = True
+            print("""                    _______                 
+   _______         |       |         _______ 
+  |       |        |       |        |       |""")
+        
+        
     def take_item(self):
         if self.current_item:
             self.player.items[self.current_item.name] = self.current_item
@@ -164,5 +192,3 @@ class Player:
 
 game = Game()
 game.start()
-
-# -> minizagadka
