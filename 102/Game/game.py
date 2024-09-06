@@ -22,9 +22,11 @@ class Game:
         self.current_item = None
         self.items = {
             "door": Door1(),
+            "door2": Door2(),
             "wheel": Wheel(),
             "pedestal": Pedestal()
         }
+        # buttons state
         self.left = False
         self.centre = False
         self.right = False
@@ -75,7 +77,7 @@ class Game:
     def wheel(self):
         if "wheel" in self.player.items:
             self.current_item = self.items["wheel"]
-            print("Would you like to USE it?")
+            print("Would you like to USE it on PEDESTAL?")
         elif "wheel" in self.used_items:
             self.current_item = self.used_items["wheel"]
             self.current_item.used()
@@ -85,7 +87,10 @@ class Game:
             self.current_item.display_description()
 
     def pedestal(self):
-        self.items["pedestal"].display_description()
+        if "wheel" not in self.used_items:
+            self.items["pedestal"].display_description()
+        else:  
+            self.describe_room()
 
     def minigame(self, command):
         if command == "left":
@@ -124,7 +129,7 @@ class Game:
     def take_item(self):
         if self.current_item:
             self.player.items[self.current_item.name] = self.current_item
-            print("You took this item to your backpack.")
+            print(f"You took {self.current_item.name.upper()} to your backpack.")
             self.current_item = None
         else:
             print("What item would you like to take? Maybe I can DESCRIBE this room for you?")
@@ -143,11 +148,9 @@ class Game:
             self.current_item = None
         else:
             if self.player.items:
-                print("What item would you like to use? You have " + ", ".join(self.player.items.keys()).upper() + " in your backpack.")
+                print(f"What item would you like to use? You have {', '.join(self.player.items.keys()).upper()} in your backpack.")
             else:
-                print("What item would you like to use? You have no items in your backpack.")
-
-
+                print("You have no items in your backpack.")
 
     def show_help(self):
         print("Type 'describe' to display a description of your surroundings...")
@@ -186,7 +189,7 @@ class Player:
 
     def list_items(self):
         if self.items:
-            print("You have " + ", ".join(self.items.keys()).upper() + " in your backpack.")
+            print(f"You have {', '.join(self.items.keys()).upper()} in your backpack.")
         else:
             print("You have no items in your backpack.")
 
