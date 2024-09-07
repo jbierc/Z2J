@@ -9,28 +9,36 @@ Wpis ma zawierać 4 elementy:
 """
 
 from rooms.room1 import Room1, Room1_1, Room1_2
-from rooms.room2 import Room2
+from rooms.room2 import Room2, Room2_1
+from rooms.room3 import Room3
 from items.gear import Wheel
 from items.pedestal import Pedestal
+from items.key import Key
 from items.doors import Door1, Door2
 
 class Game:
     def __init__(self):
         self.player = Player()
         self.is_playing = True
+
         self.current_room = Room1()
         self.current_item = None
+
         self.items = {
             "door": Door1(),
             "door2": Door2(),
             "wheel": Wheel(),
-            "pedestal": Pedestal()
+            "pedestal": Pedestal(),
+            "key": Key()
         }
+        self.used_items = {}
+
         # buttons state
+        self.minigame_state = False
         self.left = False
         self.centre = False
         self.right = False
-        self.used_items = {}
+
         self.commands = {
             "help": self.show_help,
             "describe": self.describe_room,
@@ -39,6 +47,7 @@ class Game:
             "door": self.door1,
             "wheel": self.wheel,
             "pedestal": self.pedestal,
+            "key": self.key,
             "take": self.take_item,
             "use": self.use_item
         }
@@ -58,7 +67,7 @@ class Game:
         self.handle_command(command)
 
     def handle_command(self, command):
-        if command in ["left", "centre", "right"]:
+        if command in ["left", "centre", "right"] and self.current_room == Room2() and self.minigame_state == False:
             self.minigame(command)
         else:
             action = self.commands.get(command, self.unknown_command)
@@ -91,6 +100,9 @@ class Game:
             self.items["pedestal"].display_description()
         else:  
             self.describe_room()
+    
+    def key(self):
+        pass
 
     def minigame(self, command):
         if command == "left":
@@ -98,6 +110,7 @@ class Game:
                 print("""                *** SUCCESS! ***                        
    _______          _______          _______ 
   |       |        |       |        |       |""")
+                self.minigame_state = True
             else:
                 self.left = True
                 self.centre = False
