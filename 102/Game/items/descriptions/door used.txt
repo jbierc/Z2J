@@ -3,4 +3,5 @@ In the center, there are three smaller pedestals.
 As you walk closer, you see that on each of them,
 there is a big cubical button glinting faintly in the dim light.
 The buttons seem identical at first glance, yet each one radiates a unique aura.
-Which one do you want to press? LEFT, CENTRE or RIGHT?
+Which one do you want to press?
+LEFT, CENTRE or RIGHT?

@@ -9,12 +9,11 @@ Wpis ma zawierać 4 elementy:
 """
 
 from rooms.room1 import Room1, Room1_1, Room1_2
-from rooms.room2 import Room2, Room2_1
-from rooms.room3 import Room3
-from items.gear import Wheel
+from rooms.room2 import Room2, Room2_1, Room2_2
+from items.wheel import Wheel
 from items.pedestal import Pedestal
 from items.key import Key
-from items.doors import Door1, Door2
+from items.door import Door
 
 class Game:
     def __init__(self):
@@ -25,8 +24,7 @@ class Game:
         self.current_item = None
 
         self.items = {
-            "door": Door1(),
-            "door2": Door2(),
+            "door": Door(),
             "wheel": Wheel(),
             "pedestal": Pedestal(),
             "key": Key()
@@ -43,8 +41,9 @@ class Game:
             "help": self.show_help,
             "describe": self.describe_room,
             "items": self.player.list_items,
+            "end": self. quit_game,
             "quit": self.quit_game,
-            "door": self.door1,
+            "door": self.door,
             "wheel": self.wheel,
             "pedestal": self.pedestal,
             "key": self.key,
@@ -67,7 +66,7 @@ class Game:
         self.handle_command(command)
 
     def handle_command(self, command):
-        if command in ["left", "centre", "right"] and self.current_room == Room2() and self.minigame_state == False:
+        if command in ["left", "centre", "right"] and isinstance(self.current_room, Room2) and self.minigame_state == False:
             self.minigame(command)
         else:
             action = self.commands.get(command, self.unknown_command)
@@ -76,7 +75,7 @@ class Game:
     def describe_room(self):
         self.current_room.display_description()
 
-    def door1(self):
+    def door(self):
         if "wheel" in self.used_items:
             self.items["door"].used()
             self.current_room = Room2()
@@ -86,11 +85,9 @@ class Game:
     def wheel(self):
         if "wheel" in self.player.items:
             self.current_item = self.items["wheel"]
-            print("Would you like to USE it on PEDESTAL?")
+            print("Would you like to USE it on a PEDESTAL?")
         elif "wheel" in self.used_items:
-            self.current_item = self.used_items["wheel"]
-            self.current_item.used()
-            self.current_item = None
+            self.used_items["wheel"].used()
         else:
             self.current_item = self.items["wheel"]
             self.current_item.display_description()
@@ -102,15 +99,23 @@ class Game:
             self.describe_room()
     
     def key(self):
-        pass
+        if "key" in self.player.items:
+            self.current_item = self.items["key"]
+            print("Would you like to USE it on a keyhole?")
+        else:
+            self.current_item = self.items["key"]
+            self.current_item.display_description()
 
     def minigame(self, command):
         if command == "left":
             if self.centre == True:
                 print("""                *** SUCCESS! ***                        
    _______          _______          _______ 
-  |       |        |       |        |       |""")
+  |       |        |       |        |       |
+                      """)
+                Room2_1().display_description()
                 self.minigame_state = True
+                self.current_room = Room2_1()
             else:
                 self.left = True
                 self.centre = False
@@ -148,16 +153,19 @@ class Game:
             print("What item would you like to take? Maybe I can DESCRIBE this room for you?")
         if "wheel" in self.player.items:
             self.current_room = Room1_1()
+        if "key" in self.player.items:
+            self.current_room = Room2_1()
     
     def use_item(self):
         if self.current_item:
             self.current_item.use()
             if self.current_item.name in self.player.items:
-                self.used_items[self.current_item.name] = self.current_item
                 del self.player.items[self.current_item.name]
             self.used_items[self.current_item.name] = self.current_item
             if "wheel" in self.used_items:
                 self.current_room = Room1_2()
+            if "key" in self.used_items:
+                self.current_room = Room2_2()
             self.current_item = None
         else:
             if self.player.items:
@@ -175,7 +183,7 @@ class Game:
         print("Quitting the game...")
 
     def unknown_command(self):
-        print("Unknown command. Type 'help' to see the list of available commands.")
+        print("Wrong command. Type 'help' to see the list of available commands.")
     
     '''
     def save_game(self):
