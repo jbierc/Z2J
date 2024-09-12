@@ -6,9 +6,9 @@ class Wheel(Item):
         super().__init__("wheel")
 
     def use(self):
-        self.description = self.load_description("use wheel")
+        self.description = self.load_description("wheel use")
         self.display_description()
     
     def used(self):
-        self.description = self.load_description("used wheel")
+        self.description = self.load_description("wheel used")
         self.display_description()

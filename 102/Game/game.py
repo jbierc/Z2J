@@ -10,6 +10,7 @@ Wpis ma zawierać 4 elementy:
 
 from rooms.room1 import Room1, Room1_1, Room1_2
 from rooms.room2 import Room2, Room2_1, Room2_2
+from rooms.room3 import Room3
 from items.wheel import Wheel
 from items.pedestal import Pedestal
 from items.key import Key
@@ -41,7 +42,6 @@ class Game:
             "help": self.show_help,
             "describe": self.describe_room,
             "items": self.player.list_items,
-            "end": self. quit_game,
             "quit": self.quit_game,
             "door": self.door,
             "wheel": self.wheel,
@@ -154,7 +154,7 @@ class Game:
         if "wheel" in self.player.items:
             self.current_room = Room1_1()
         if "key" in self.player.items:
-            self.current_room = Room2_1()
+            self.current_room = Room2_2()
     
     def use_item(self):
         if self.current_item:
@@ -165,7 +165,7 @@ class Game:
             if "wheel" in self.used_items:
                 self.current_room = Room1_2()
             if "key" in self.used_items:
-                self.current_room = Room2_2()
+                self.current_room = Room3()
             self.current_item = None
         else:
             if self.player.items:
@@ -184,19 +184,6 @@ class Game:
 
     def unknown_command(self):
         print("Wrong command. Type 'help' to see the list of available commands.")
-    
-    '''
-    def save_game(self):
-        with open("savegame.txt", "w") as f:
-            f.write(self.current_room)
-
-    def load_game(self):
-        if os.path.exists("savegame.txt"):
-            with open("savegame.txt", "r") as f:
-                self.current_room = f.read().strip()
-        else:
-            print("No saved game.")
-    '''
 
 class Player:
 
