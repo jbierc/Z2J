@@ -1,13 +1,3 @@
-"""
-Potem zrób wpis na p-102-egzamin 
-Wpis ma zawierać 4 elementy:
-
-1. Napisz co sprawiło Ci największy problem i jak udało Ci się z tym poradzić.
-2. Daj link do nagrania rozgrywki.
-3. Daj link do repozytorium z kodem (publicznie dostępne).
-4. Jeśli do rozwiązania były Ci potrzebne inne materiały niż książka, wrzuć linki.
-"""
-
 from rooms.room1 import Room1, Room1_1, Room1_2
 from rooms.room2 import Room2, Room2_1, Room2_2
 from rooms.room3 import Room3
